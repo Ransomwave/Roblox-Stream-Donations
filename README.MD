@@ -6,7 +6,7 @@ A simple server that displays Roblox donations in a Streamlabs-like way to an OB
 
 I recently got permanently suspended from PayPal. I'll cut you the details, but the reasons were absolute BS.
 
-As I got that e-mail I thought: "Man, isn't there a way to do the same but with Roblo Robux? It seems easy enough." But, after looking around for a while, I haven't found any resource that allows you, as a streamer, to easily send HTTP requests to a web server for them to display on OBS.
+As I got that e-mail I thought: "Man, isn't there a way to do the same but with Roblox Robux? It seems easy enough." But, after looking around for a while, I haven't found any resource that allows you, as a streamer, to easily send HTTP requests to a web server for them to display on OBS.
 
 This resource allows you to host your own local (or public, but you'll have to configure it yourself) webserver and have a game send donation data to it.
 
