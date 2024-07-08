@@ -16,7 +16,11 @@ Rest API hosted on "http://localhost:3000/api/donations" using ExpressJS. All st
 
 ## How?
 
-Use NPM and install ExpressJS. The rest is already taken care for you!
+1. Use NPM and install ExpressJS
+2. Run the server with "npm run start"
+3. Point your Roblox HTTP requests to "http://localhost:3000/api/donations".
+4. Make a new Browser Source in OBS and add "http://localhost:3000" as a source.
+5. You're done!
 
 ## How do I send requests from Roblox?
 
