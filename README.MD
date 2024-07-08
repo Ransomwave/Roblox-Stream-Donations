@@ -2,23 +2,27 @@
 
 A simple server that displays Roblox donations in a Streamlabs-like way to an OBS web
 
-## Why
+## Why?
 
-I recently got permanently suspended from PayPal. As I got that e-mail I thought "Man, isn't there a way to do the same but with Roblo Robux? It seems easy enough." But, after looking around for a while, I haven't found any resource that allows you, as a streamer, to easily send HTTP requests to a web server for them to display on OBS.
+I recently got permanently suspended from PayPal. I'll cut you the details, but the reasons were absolute BS.
 
-This resource allows you to open your own local webserver and have a game send donation data to it.
+As I got that e-mail I thought: "Man, isn't there a way to do the same but with Roblo Robux? It seems easy enough." But, after looking around for a while, I haven't found any resource that allows you, as a streamer, to easily send HTTP requests to a web server for them to display on OBS.
+
+This resource allows you to host your own local (or public, but you'll have to configure it yourself) webserver and have a game send donation data to it.
 
 ## What?
 
-Rest API hosted on "http://localhost:3000/api/donations" using ExpressJS.
+Rest API hosted on "http://localhost:3000/api/donations" using ExpressJS. All static content is hosted under "/public".
 
 ## How?
 
-Use NPM and install ExpressJS. The rest is already taken care for you?
+Use NPM and install ExpressJS. The rest is already taken care for you!
 
-## How do I send requests on Roblox?
+## How do I send requests from Roblox?
 
-You can use Roblox's HTTP Service. Here's a code example.
+You can use Roblox's HTTP Service to send a request every time a Developer Product is bought, for example.
+
+Here's a code example.
 
 ```
 local MarketplaceService = game:GetService("MarketplaceService")
