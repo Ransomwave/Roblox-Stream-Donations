@@ -1,6 +1,6 @@
-# Robux Stream Donations - Web Source for OBS
+# Robux Stream Donations - Browser Source for OBS
 
-A simple server that displays Roblox donations in a Streamlabs-like way to an OBS web
+A simple server that displays Roblox donations in a Streamlabs-like way to an OBS Browser Source.
 
 ## Why?
 
@@ -24,7 +24,8 @@ Rest API hosted on "http://localhost:3000/api/donations" using ExpressJS. All st
 
 ## How do I send requests from Roblox?
 
-You can use Roblox's HTTP Service to send a request every time a Developer Product is bought, for example.
+You can use Roblox's HTTP Service to send a request every time a Developer Product is bought, for example. 
+**PLEASE NOTE that you will need a public server to allow your viewers to donate. This can be easily hosted on platforms like Vercel or Netlify.**
 
 Here's a code example.
 
@@ -33,7 +34,7 @@ local MarketplaceService = game:GetService("MarketplaceService")
 local HttpService = game:GetService("HttpService")
 
 function sendDonation(donorName, amount)
-	local url = "http://localhost:3000/api/donations"
+	local url = "http://localhost:3000/api/donations" -- Or your server URL (ex: myamazingdomain.com/api/donations)
 	local data = {
 		donorName = donorName,
 		amount = amount
