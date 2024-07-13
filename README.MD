@@ -1,6 +1,6 @@
 # Robux Stream Donations - Web Source for OBS
 
-A simple server that displays Roblox donations in a Streamlabs-like way to an OBS web
+A simple server that displays Roblox donations in a Streamlabs-like way to an OBS web.
 
 ## Why?
 
@@ -12,7 +12,7 @@ This resource allows you to host your own local (or public, but you'll have to c
 
 ## What?
 
-Rest API hosted on "/api/donations" using ExpressJS. All static content is hosted under "/public".
+Rest API hosted on "/api/donations" using ExpressJS. All static content is hosted under "/public". If multiple donations are sent at the same time, they will be put on a queue and won't play at the same time!
 
 ## How?
 
