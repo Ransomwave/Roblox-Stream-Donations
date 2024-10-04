@@ -94,7 +94,10 @@
           lastDonationTimestamp = newDonation.timestamp;
 
           const donationsDiv = document.getElementById("donations");
-          donationsDiv.innerHTML = `<br /><strong>${newDonation.donorName}</strong> donated <strong>${newDonation.amount}</strong> ROBUX!`;
+          donationsDiv.innerHTML = `<br />
+          <strong>${newDonation.donorName}</strong> donated <strong>${newDonation.amount}</strong> ROBUX!
+          <br />
+          <i>"${newDonation.donorMessage}"</i>`;
           showDonation();
 
           setTimeout(() => {

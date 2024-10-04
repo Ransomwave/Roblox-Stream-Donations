@@ -5,20 +5,27 @@ const path = require("path");
 app.use(express.json());
 
 // Serve static files from the 'public' directory
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
 
 let donations = []; // Temporary storage for donations
 
 app.post("/api/donations", (req, res) => {
-  const { donorName, amount, clientSecret } = req.body; // Extract clientSecret from the request body
+  const { donorName, amount, donorMessage, clientSecret } = req.body; // Extract clientSecret from the request body
 
   // Validate the client secret
   if (clientSecret !== CLIENT_SECRET) {
     return res.status(401).send("Unauthorized: Invalid client secret"); // Return 418 status code if the client secret is nil or invalid
   }
 
-  donations.push({ donorName, amount, timestamp: new Date() }); // Add timestamp for sorting
+  // Process the donation
+  donations.push({ donorName, amount, donorMessage, timestamp: new Date() }); // Add timestamp for sorting
   res.status(200).send("Donation received");
+
+  // Remove the first donation from the temporary storage after processing
+  // Optionally, you can remove old donations based on some condition, e.g., keeping only the last 10 donations
+  if (donations.length >= 2) {
+    donations.shift();
+  }
 });
 
 app.get("/api/donations", (req, res) => {
