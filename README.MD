@@ -1,6 +1,6 @@
-# Robux Stream Donations - Web Source for OBS
+# Robux Stream Donations - Web Source for OBS (TTS SUPPORT!)
 
-A simple ExpressJS server that alerts of Roblox ROBUX donations to an OBS web source. This tool is similar to Streamlabs alert, Twitch alerts, Streamelements alerts... etc. but specifically catered to Roblox Robux donations.
+A simple ExpressJS server that dynamically alerts of Roblox ROBUX donations donations to an OBS Web source, with support for **Donation messages, TTS, & more**! (Similar to Streamlabs alerts)
 
 ## Why?
 
