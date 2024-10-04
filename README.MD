@@ -1,18 +1,16 @@
 # Robux Stream Donations - Web Source for OBS
 
-A simple server that displays Roblox donations in a Streamlabs-like way to an OBS web.
+A simple ExpressJS server that alerts of Roblox ROBUX donations to an OBS web source. This tool is similar to Streamlabs alert, Twitch alerts, Streamelements alerts... etc. but specifically catered to Roblox Robux donations.
 
 ## Why?
 
-I recently got permanently suspended from PayPal. I'll cut you the details, but the reasons were absolute BS.
+I recently got permanently suspended from PayPal. I'll cut you the details, but this was a massive hit for me & my Twitch. I thought: "Isn't there a way to do the same but with Roblox Robux? It seems easy enough." After looking around for a while, I was unable to find any resource that allows you, as a streamer, to easily send Robux donation alerts to an OBS web source.
 
-As I got that e-mail I thought: "Man, isn't there a way to do the same but with Roblo Robux? It seems easy enough." But, after looking around for a while, I haven't found any resource that allows you, as a streamer, to easily send HTTP requests to a web server for them to display on OBS.
-
-This resource allows you to host your own local (or public, but you'll have to configure it yourself) webserver and have a game send donation data to it.
+This resource allows you to host your public webserver and have a game send donation data to it.
 
 ## What?
 
-Rest API hosted on "/api/donations" using ExpressJS. All static content is hosted under "/public". If multiple donations are sent at the same time, they will be put on a queue and won't play at the same time!
+API hosted on "/api/donations" using ExpressJS. All static content (HTML of the alert) is hosted under "/public". If multiple donations are sent at the same time, they will be put on a queue and won't play at the same time.
 
 ## How?
 
@@ -23,7 +21,6 @@ Rest API hosted on "/api/donations" using ExpressJS. All static content is hoste
 5. Personalize the code as much as you want. Change the style, text, gif, music... Anything!
 6. Publish your web server to a host (free ones include Vercel or Netlify).
 7. On Roblox, use the .rblx place file linked below or create your own. Be sure to send the requests to the URL you got from your host (ex. https://my-epic-donations1337.vercel.io/api/donations)
-   - _(COMING SOON)_
 8. Add the Browser Source to OBS
 
 ## How do I send requests from Roblox?
@@ -35,30 +32,75 @@ Here's a code example.
 ```lua
 local MarketplaceService = game:GetService("MarketplaceService")
 local HttpService = game:GetService("HttpService")
-
-local url = "http://localhost:3000/api/donations" -- Replace with your domain (ex. http://myamazingdomain.com/api/donations).
+local Players = game.Players
+local url = "http://localhost:12000/api/donations" -- Replace with your domain (ex. http://myamazingdomain.com/api/donations).
 local CLIENT_SECRET = "roblox"
 
-function sendDonation(donorName, amount)
+local Donations = {
+	[50] = 1910955952; -- Your product IDs go here.
+	[75] = 1910959318; -- I made the index of each one represent the amount of the donation for simplicity's sake.
+	[100] = 1910960735; -- But you can configure it the way your heart desires.
+	[500] = 1910962141;
+	[1000] = 1910962556;
+	[5000] = 1910962869;
+	[10000] = 1910963800;	
+}
+
+function sendDonation(donorName, amount, donorMsg)
 	local data = {
 		donorName = donorName,
 		amount = amount,
+		donorMessage = donorMsg,
 		clientSecret = CLIENT_SECRET
 	}
 	local jsonData = HttpService:JSONEncode(data)
 
+	--print(jsonData)
 	HttpService:PostAsync(url, jsonData, Enum.HttpContentType.ApplicationJson)
+
 end
 
-MarketplaceService.PromptProductPurchaseFinished:Connect(function(player, assetId, isPurchased)
-	print(`PromptProductPurchaseFinished`)
-	if isPurchased == true then
-		local plr = game.Players:GetPlayerByUserId(player)
-		local info = MarketplaceService:GetProductInfo(assetId, Enum.InfoType.Product)
-		sendDonation(plr.Name, info.PriceInRobux)
-		print(`Player {plr.Name} bought {info.PriceInRobux} worth of Donations. Sent to {url}.`)
+-- Table setup containing product IDs and functions for handling purchases
+
+local productFunctions = {
+	
+}
+
+for i,v in Donations do
+	productFunctions[v] = function(receipt, player:Player)
+		local info = MarketplaceService:GetProductInfo(v, Enum.InfoType.Product)
+		sendDonation(`{player.DisplayName} (@{player.Name})`, info.PriceInRobux, player.PlayerGui.ScreenGui.SendTTSDialog.TextBox.Text)
+		return true
 	end
-end)
+	print(`Inserted index {i}, value {v}`)
+end
+
+local function processReceipt(receiptInfo)
+	local userId = receiptInfo.PlayerId
+	local productId = receiptInfo.ProductId
+
+	local player = Players:GetPlayerByUserId(userId)
+	if player then
+		-- Get the handler function associated with the developer product ID and attempt to run it
+		local handler = productFunctions[productId]
+		local success, result = pcall(handler, receiptInfo, player)
+		if success then
+			
+			--task.wait(5)
+			
+			return Enum.ProductPurchaseDecision.PurchaseGranted
+		else
+			warn("Failed to process receipt:", receiptInfo, result)
+		end
+	end
+
+	-- The user's benefits couldn't be awarded
+	-- Return "NotProcessedYet" to try again next time the user joins
+	return Enum.ProductPurchaseDecision.NotProcessedYet
+end
+
+-- Set the callback; this can only be done once by one server-side script
+MarketplaceService.ProcessReceipt = processReceipt
 
 ```
 
