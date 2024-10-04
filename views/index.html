@@ -78,6 +78,25 @@
       let lastDonationTimestamp = 0;
       let isDisplayingDonation = false;
 
+      var msg = new SpeechSynthesisUtterance();
+
+      // List all possible voices for TTS
+      // You can use the following voices:
+      // Google UK English Male
+      // Google UK English Female
+      // Google US English
+      // Microsoft David Desktop - English (United States)
+      // Microsoft Zira Desktop - English (United States)
+      // Microsoft George - English (United Kingdom)
+      // Microsoft Hazel - English (United Kingdom)
+      // Microsoft Susan - English (United Kingdom)
+
+      // Set the TTS voice to Microsoft George GB
+      speechSynthesis.onvoiceschanged = () => {
+        const voices = speechSynthesis.getVoices();
+        msg.voice = voices[5];
+      };
+
       async function fetchDonations() {
         if (isDisplayingDonation) return;
 
@@ -95,10 +114,16 @@
 
           const donationsDiv = document.getElementById("donations");
           donationsDiv.innerHTML = `<br />
-          <strong>${newDonation.donorName}</strong> donated <strong>${newDonation.amount}</strong> ROBUX!
+          <strong>${sanitizeHTML(
+            newDonation.donorName
+          )}</strong> donated <strong>${newDonation.amount}</strong> ROBUX!
           <br />
-          <i>"${newDonation.donorMessage}"</i>`;
-          showDonation();
+          <i>"${sanitizeHTML(newDonation.donorMessage)}"</i>`;
+          showDonation(
+            sanitizeHTML(newDonation.donorName),
+            newDonation.amount,
+            sanitizeHTML(newDonation.donorMessage)
+          );
 
           setTimeout(() => {
             hideDonation();
@@ -106,10 +131,16 @@
         }
       }
 
-      function showDonation() {
+      function sanitizeHTML(str) {
+        const temp = document.createElement("div");
+        temp.textContent = str;
+        return temp.innerHTML;
+      }
+
+      function showDonation(donorName, amount, donorMessage) {
         const donationsDiv = document.getElementById("donations");
         donationsDiv.classList.remove("fadeOut");
-        fadeIn = donationsDiv.classList.add("fadeIn");
+        donationsDiv.classList.add("fadeIn");
         donationsDiv.style.display = "block"; // Make sure the div is visible
 
         // Create and configure the image element
@@ -129,10 +160,19 @@
 
         // Adjust the volume of the donation sound
         const donationSound = document.getElementById("donationSound");
-        donationSound.volume = 0.3; // Adjust volume to 50%
+        donationSound.volume = 0.3; // Adjust volume to 30%
 
         // Play the donation sound
-        document.getElementById("donationSound").play();
+        donationSound.play();
+
+        // When the donation sound ends, play the TTS message after a 1-second delay
+        donationSound.onended = () => {
+          setTimeout(() => {
+            const ttsMessage = `${donorName} donated ${amount} ROBUX: ${donorMessage}`;
+            msg.text = ttsMessage;
+            window.speechSynthesis.speak(msg);
+          }, 500);
+        };
       }
 
       function hideDonation() {
