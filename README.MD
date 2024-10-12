@@ -2,6 +2,8 @@
 
 A simple ExpressJS server that dynamically alerts of Roblox ROBUX donations donations to an OBS Web source, with support for **Donation messages, TTS, & more**! (Similar to Streamlabs alerts)
 
+[🎥 Demo of this tool](https://x.com/RansomwaveGames/status/1845154297798873380)
+
 ## Why?
 
 I recently got permanently suspended from PayPal. I'll cut you the details, but this was a massive hit for me & my Twitch. I thought: "Isn't there a way to do the same but with Roblox Robux? It seems easy enough." After looking around for a while, I was unable to find any resource that allows you, as a streamer, to easily send Robux donation alerts to an OBS web source.
