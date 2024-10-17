@@ -80,6 +80,8 @@
     </div>
 
     <script>
+      const MIN_TTS_AMOUNT = 100; // Set this to the minimum donation amount you want for TTS to appear.
+
       let lastDonationTimestamp = 0;
       let isDisplayingDonation = false;
 
@@ -108,7 +110,7 @@
           const donationsDiv = document.getElementById("donations");
 
           const donationAmount = Number(newDonation.amount); // Convert
-          if (donationAmount < 100) {
+          if (donationAmount < MIN_TTS_AMOUNT) {
             donationsDiv.innerHTML = `<br />
               <strong>${sanitizeHTML(
                 newDonation.donorName
@@ -177,11 +179,11 @@
         donationSound.onended = () => {
           setTimeout(() => {
             const donationAmount = Number(amount); // Convert amount to a number
-            if (donationAmount < 100) {
-              console.log(`Donation below 100 (${donationAmount} ROBUX)`);
+            if (donationAmount < MIN_TTS_AMOUNT) {
+              console.log(`Donation below threshold (${donationAmount} ROBUX)`);
             } else {
               console.log(
-                `Donation above 100, playing TTS: ${donorName} donated ${donationAmount} ROBUX: ${donorMessage}`
+                `Donation above threshold, playing TTS: ${donorName} donated ${donationAmount} ROBUX: ${donorMessage}`
               );
               const ttsMessage = `${donorName} donated ${donationAmount} ROBUX: ${donorMessage}`;
               msg.text = ttsMessage;
