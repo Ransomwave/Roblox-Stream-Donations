@@ -85,17 +85,6 @@
 
       var msg = new SpeechSynthesisUtterance();
 
-      // List all possible voices for TTS
-      // You can use the following voices:
-      // Google UK English Male
-      // Google UK English Female
-      // Google US English
-      // Microsoft David Desktop - English (United States)
-      // Microsoft Zira Desktop - English (United States)
-      // Microsoft George - English (United Kingdom)
-      // Microsoft Hazel - English (United Kingdom)
-      // Microsoft Susan - English (United Kingdom)
-
       speechSynthesis.onvoiceschanged = () => {
         const voices = speechSynthesis.getVoices();
         msg.voice = voices[5];
@@ -118,30 +107,31 @@
 
           const donationsDiv = document.getElementById("donations");
 
-          if (donorMessage.length === 0) {
-                donationsDiv.innerHTML = `<br />
+          const donationAmount = Number(newDonation.amount); // Convert
+          if (donationAmount < 100) {
+            donationsDiv.innerHTML = `<br />
               <strong>${sanitizeHTML(
                 newDonation.donorName
               )}</strong> donated <strong>${newDonation.amount}</strong> ROBUX!
               <br />`;
-              showDonation(
-                sanitizeHTML(newDonation.donorName),
-                newDonation.amount,
-                sanitizeHTML(newDonation.donorMessage)
-              );
-            } else {
-              donationsDiv.innerHTML = `<br />
+            showDonation(
+              sanitizeHTML(newDonation.donorName),
+              newDonation.amount,
+              sanitizeHTML(newDonation.donorMessage)
+            );
+          } else {
+            donationsDiv.innerHTML = `<br />
           <strong>${sanitizeHTML(
             newDonation.donorName
           )}</strong> donated <strong>${newDonation.amount}</strong> ROBUX!
           <br />
           <i>"${sanitizeHTML(newDonation.donorMessage)}"</i>`;
-          showDonation(
-            sanitizeHTML(newDonation.donorName),
-            newDonation.amount,
-            sanitizeHTML(newDonation.donorMessage)
-          );
-            }
+            showDonation(
+              sanitizeHTML(newDonation.donorName),
+              newDonation.amount,
+              sanitizeHTML(newDonation.donorMessage)
+            );
+          }
 
           setTimeout(() => {
             hideDonation();
@@ -186,10 +176,14 @@
         // When the donation sound ends, play the TTS message after a 1-second delay
         donationSound.onended = () => {
           setTimeout(() => {
-            if (donorMessage.length === 0) {
-              console.log("No message provided");
+            const donationAmount = Number(amount); // Convert amount to a number
+            if (donationAmount < 100) {
+              console.log(`Donation below 100 (${donationAmount} ROBUX)`);
             } else {
-              const ttsMessage = `${donorName} donated ${amount} ROBUX: ${donorMessage}`;
+              console.log(
+                `Donation above 100, playing TTS: ${donorName} donated ${donationAmount} ROBUX: ${donorMessage}`
+              );
+              const ttsMessage = `${donorName} donated ${donationAmount} ROBUX: ${donorMessage}`;
               msg.text = ttsMessage;
               window.speechSynthesis.speak(msg);
             }
