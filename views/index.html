@@ -18,6 +18,11 @@
         text-align: center;
       }
 
+      .donations {
+        size: 40px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      }
+
       @keyframes fadeIn {
         0% {
           opacity: 0;
@@ -91,7 +96,6 @@
       // Microsoft Hazel - English (United Kingdom)
       // Microsoft Susan - English (United Kingdom)
 
-      // Set the TTS voice to Microsoft George GB
       speechSynthesis.onvoiceschanged = () => {
         const voices = speechSynthesis.getVoices();
         msg.voice = voices[5];
@@ -113,7 +117,20 @@
           lastDonationTimestamp = newDonation.timestamp;
 
           const donationsDiv = document.getElementById("donations");
-          donationsDiv.innerHTML = `<br />
+
+          if (donorMessage.length === 0) {
+                donationsDiv.innerHTML = `<br />
+              <strong>${sanitizeHTML(
+                newDonation.donorName
+              )}</strong> donated <strong>${newDonation.amount}</strong> ROBUX!
+              <br />`;
+              showDonation(
+                sanitizeHTML(newDonation.donorName),
+                newDonation.amount,
+                sanitizeHTML(newDonation.donorMessage)
+              );
+            } else {
+              donationsDiv.innerHTML = `<br />
           <strong>${sanitizeHTML(
             newDonation.donorName
           )}</strong> donated <strong>${newDonation.amount}</strong> ROBUX!
@@ -124,6 +141,7 @@
             newDonation.amount,
             sanitizeHTML(newDonation.donorMessage)
           );
+            }
 
           setTimeout(() => {
             hideDonation();
@@ -168,10 +186,14 @@
         // When the donation sound ends, play the TTS message after a 1-second delay
         donationSound.onended = () => {
           setTimeout(() => {
-            const ttsMessage = `${donorName} donated ${amount} ROBUX: ${donorMessage}`;
-            msg.text = ttsMessage;
-            window.speechSynthesis.speak(msg);
-          }, 500);
+            if (donorMessage.length === 0) {
+              console.log("No message provided");
+            } else {
+              const ttsMessage = `${donorName} donated ${amount} ROBUX: ${donorMessage}`;
+              msg.text = ttsMessage;
+              window.speechSynthesis.speak(msg);
+            }
+          }, 100);
         };
       }
 
