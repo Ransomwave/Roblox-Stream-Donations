@@ -70,9 +70,7 @@ end
 
 -- Table setup containing product IDs and functions for handling purchases
 
-local productFunctions = {
-	
-}
+local productFunctions = {}
 
 for i,v in Donations do
 	productFunctions[v] = function(receipt, player:Player)
@@ -111,6 +109,7 @@ end
 MarketplaceService.ProcessReceipt = processReceipt
 
 ```
+This code will send an HTTP request to your server each time a Developer Product is purchased.
 
 ### Is sending the CLIENT_SECRET in the body safe?
 
