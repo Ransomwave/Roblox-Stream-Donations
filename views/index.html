@@ -12,15 +12,70 @@
       body {
         font-family: "Roboto", sans-serif;
         color: white;
+        background-color: #000;
       }
 
       .content {
         text-align: center;
       }
 
-      .donations {
-        size: 40px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      .alert_widget-container {
+        display: flex;
+        background-color: rgba(255, 255, 255, 0);
+        width: 100%;
+        height: 100%;
+        padding: 16px;
+        border-radius: 10px;
+        flex-direction: column;
+      }
+
+      .alert_image-container {
+        display: flex;
+        flex-grow: 1;
+        width: 36%;
+        margin-top: 16px;
+        justify-content: center;
+        align-self: center;
+      }
+
+      .alert_image {
+        width: 100%;
+        height: 100%;
+        border-radius: 3px;
+      }
+
+      .alert_text-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        flex-direction: column;
+        width: 100%;
+        position: relative;
+        z-index: 1;
+        max-height: 100%;
+        max-width: 100%;
+      }
+
+      .alert_text {
+        font-family: Roboto, sans-serif;
+        font-size: 24px;
+        font-weight: 600;
+        color: #ffffff;
+        width: 100%;
+        margin: 10px;
+      }
+
+      .alert-widget__text-accent {
+        color: #ff4646;
+      }
+
+      .alert_secondary-text {
+        font-family: Roboto, sans-serif;
+        font-size: 16px;
+        font-weight: normal;
+        color: #ffffff;
+        width: 100%;
       }
 
       @keyframes fadeIn {
@@ -46,26 +101,12 @@
       }
 
       #donations.fadeIn {
-        display: inline-block;
-
-        background-color: rgba(0, 0, 0);
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        border-radius: 10px;
-        padding: 20px;
-
-        size: fit-content;
+        display: flex;
         animation: fadeIn 1s forwards;
       }
 
       #donations.fadeOut {
-        display: inline-block;
-
-        background-color: rgba(0, 0, 0);
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        border-radius: 10px;
-        padding: 20px;
-
-        size: fit-content;
+        display: flex;
         animation: fadeOut 1s forwards;
       }
     </style>
@@ -80,7 +121,10 @@
     </div>
 
     <script>
+      // !!! RECOMMENDED WINDOW SIZE: 700x600 !!!
       const MIN_TTS_AMOUNT = 100; // Set this to the minimum donation amount you want for TTS to appear.
+      const DONATION_TIME = 7000; // Set this to the time you want the donation to appear on the screen.
+      const SOUND_VOLUME = 0.2; // Set this to the volume you want the donation sound to be.
 
       let lastDonationTimestamp = 0;
       let isDisplayingDonation = false;
@@ -111,23 +155,54 @@
 
           const donationAmount = Number(newDonation.amount); // Convert
           if (donationAmount < MIN_TTS_AMOUNT) {
-            donationsDiv.innerHTML = `<br />
-              <strong>${sanitizeHTML(
-                newDonation.donorName
-              )}</strong> donated <strong>${newDonation.amount}</strong> ROBUX!
-              <br />`;
+            donationsDiv.innerHTML = `
+              <div class="alert_widget-container">
+                <div class="alert_image-container">
+                  <img id="main-image" class="alert_image" src="/dono.gif" alt="Alert image" />
+                </div>
+                <div class="alert_text-container">
+                  <div class="resize-detector">&nbsp;</div>
+                  <div style="width: 100%;">
+                    <p class="alert_text">
+                      <span class="alert-widget__text-accent">${sanitizeHTML(
+                        newDonation.donorName
+                      )}</span> donated <strong>${
+              newDonation.amount
+            }</strong> ROBUX!</p>
+                    <p class="alert_secondary-text">${sanitizeHTML(
+                      newDonation.donorMessage
+                    )}</p>
+                  </div>
+                </div>
+              </div>
+            `;
             showDonation(
               sanitizeHTML(newDonation.donorName),
               newDonation.amount,
               sanitizeHTML(newDonation.donorMessage)
             );
           } else {
-            donationsDiv.innerHTML = `<br />
-          <strong>${sanitizeHTML(
-            newDonation.donorName
-          )}</strong> donated <strong>${newDonation.amount}</strong> ROBUX!
-          <br />
-          <i>"${sanitizeHTML(newDonation.donorMessage)}"</i>`;
+            donationsDiv.innerHTML = `
+              <div class="alert_widget-container">
+                <div class="alert_image-container">
+                  <img id="main-image" class="alert_image" src="/dono.gif" alt="Alert image" />
+                </div>
+                <div class="alert_text-container">
+                  <div class="resize-detector">&nbsp;</div>
+                  <div style="width: 100%;">
+                    <p class="alert_text">
+                      <span class="alert-widget__text-accent">${sanitizeHTML(
+                        newDonation.donorName
+                      )}</span> donated <strong>${
+              newDonation.amount
+            }</strong> ROBUX!</p>
+                    <p class="alert_secondary-text">${sanitizeHTML(
+                      newDonation.donorMessage
+                    )}</p>
+                  </div>
+                </div>
+              </div>
+            `;
             showDonation(
               sanitizeHTML(newDonation.donorName),
               newDonation.amount,
@@ -137,7 +212,7 @@
 
           setTimeout(() => {
             hideDonation();
-          }, 10000); // Display each donation for 10 seconds
+          }, DONATION_TIME); // Display each donation for 7 seconds
         }
       }
 
@@ -151,26 +226,11 @@
         const donationsDiv = document.getElementById("donations");
         donationsDiv.classList.remove("fadeOut");
         donationsDiv.classList.add("fadeIn");
-        donationsDiv.style.display = "block"; // Make sure the div is visible
-
-        // Create and configure the image element
-        const img = document.createElement("img");
-        img.src = "/dinero-02.gif"; // Replace this with your the URL of your image
-        img.alt = "Donation Image"; // Provide an alt text for the image (not necessary but advised)
-        img.style = "z-index: 1; position: relative;"; // Don't change unless you know what you're doing
-
-        // Remove any existing images before adding a new one
-        const existingImg = donationsDiv.querySelector("img");
-        if (existingImg) {
-          donationsDiv.removeChild(existingImg);
-        }
-
-        // Prepend the new image to the donationsDiv
-        donationsDiv.prepend(img);
+        donationsDiv.style.display = "flex"; // Make sure the div is visible
 
         // Adjust the volume of the donation sound
         const donationSound = document.getElementById("donationSound");
-        donationSound.volume = 0.3; // Adjust volume to 30%
+        donationSound.volume = SOUND_VOLUME; // Adjust volume to 20%
 
         // Play the donation sound
         donationSound.play();
