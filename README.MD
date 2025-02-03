@@ -16,14 +16,20 @@ API hosted on "/api/donations" using ExpressJS. All static content (HTML of the 
 
 ## How?
 
-1. Download and install NPM and Visual Studio Code on your PC.
-2. Use NPM to download ExpressJS
-3. Clone this repository
-4. Replace the default CLIENT_SECRET
-5. Personalize the code as much as you want. Change the style, text, gif, music... Anything!
-6. Publish your web server to a host (free ones include Vercel or Netlify).
-7. On Roblox, use the .rblx place file linked below or create your own. Be sure to send the requests to the URL you got from your host (ex. https://my-epic-donations1337.vercel.io/api/donations)
-8. Add the Browser Source to OBS
+1. Download & install Visual Studio Code on your PC.
+2. Download & install [Git](https://git-scm.com/downloads)
+3. Download & install [NPM](https://www.npmjs.com/).
+4. Use NPM to download [Express](https://www.npmjs.com/package/express)
+5. Clone this repository: `git clone https://github.com/Ransomwave/Roblox-Stream-Donations`
+6. Edit `server.js` & Replace the default `CLIENT_SECRET`.
+7. Customize the HTML code (the `index.html` file) as much as you want. (Change the style, text, gif, music... Anything!)
+8. Publish your web server to a host (free ones include Vercel or Netlify).
+9. On Roblox, use the .rblx place file linked below _(THERE WILL BE A TEMPLATE SOON)_ or create your own. (Be sure the HTTP requests are pointing to /api/donnations _(eg. https://donos-example.vercel.io/api/donations)_)
+10. Once you're happy with how your donations look, create a repository on GitHub and upload your code.
+11. Sign up to a free host like [Vercel](https://vercel.com)
+12. Make a new Project & associate it with your new repository.
+13. Once It's uploaded, copy the generated URL (ex. https://donos-example.vercel.io/)
+14. Add the link as a Browser Source to OBS
 
 ## How do I send requests from Roblox?
 
@@ -35,7 +41,7 @@ Here's a code example.
 local MarketplaceService = game:GetService("MarketplaceService")
 local HttpService = game:GetService("HttpService")
 local Players = game.Players
-local url = "http://localhost:12000/api/donations" -- Replace with your domain (ex. http://myamazingdomain.com/api/donations).
+local url = "http://localhost:12000/api/donations" -- Replace with your domain (ex. https://donos-example.vercel.io/api/donations).
 local CLIENT_SECRET = "roblox"
 
 local Donations = {
@@ -64,9 +70,7 @@ end
 
 -- Table setup containing product IDs and functions for handling purchases
 
-local productFunctions = {
-	
-}
+local productFunctions = {}
 
 for i,v in Donations do
 	productFunctions[v] = function(receipt, player:Player)
@@ -105,6 +109,7 @@ end
 MarketplaceService.ProcessReceipt = processReceipt
 
 ```
+This code will send an HTTP request to your server each time a Developer Product is purchased.
 
 ### Is sending the CLIENT_SECRET in the body safe?
 
