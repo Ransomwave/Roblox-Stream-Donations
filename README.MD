@@ -27,7 +27,7 @@ API hosted on "/api/donations" using ExpressJS. All static content (HTML of the 
 10. Once you're happy with how your donations look, create a repository on GitHub and upload your code.
 11. Sign up to a free host like [Vercel](https://vercel.com)
 12. Make a new Project & associate it with your new repository.
-13. Once It's uploaded, copy the generated URL (ex. https://donos-example.vercel.io/)
+13. Once It's uploaded, copy the generated URL (eg. https://your-amazing-website.vercel.io/)
 14. Add the link as a Browser Source to OBS
 
 ## How do I send requests from Roblox?
