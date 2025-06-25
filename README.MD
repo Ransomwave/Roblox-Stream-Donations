@@ -6,7 +6,7 @@ A simple ExpressJS server that dynamically alerts of Roblox ROBUX donations dona
 
 Roblox streamers need a way of receiving donations without worrying about leaking personal details or chargebacks with platforms like PayPal.
 
-Unlike [other solutions](https://www.youtube.com/watch?v=pXUYkEhH5ss), this project is meant to be entirely hosted and operated by you, meaning [people like haz3m doesn't take a 10% cut off your donations](https://www.reddit.com/r/roblox/comments/tanvus/robloxs_gamepass_sales_have_a_hidden_10_fee_that/).
+Unlike [other solutions](https://www.youtube.com/watch?v=pXUYkEhH5ss), this project is meant to be entirely hosted and operated by you, meaning [people like haz3m don't take a 10% cut off your donations](https://www.reddit.com/r/roblox/comments/tanvus/robloxs_gamepass_sales_have_a_hidden_10_fee_that/).
 
 This resource allows you to host a public web server and have a game send Robux donation data to it.
 
