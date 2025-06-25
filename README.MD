@@ -21,7 +21,7 @@ API hosted on "/api/donations" using ExpressJS. All static content (HTML of the 
 3. Download & install [Node.js](https://nodejs.org/en/download).
 4. Clone this repository: `git clone https://github.com/Ransomwave/Roblox-Stream-Donations`
 5. Run the `npm i` command to install all project dependencies.
-6. Edit `server.js` & replace the default `CLIENT_SECRET`.
+6. Copy the `.env.example` file, modify the default `CLIENT_SECRET` and save it as `.env`.
 7. Customize the HTML code (the `index.html` file) to your liking. (Change the style, text, gif, music... Anything!)
 8. Publish your web server to a host (eg. Vercel or Netlify).
 9. On Roblox, use the .rblx place file linked below _(THERE WILL BE A TEMPLATE SOON)_ or create your own. 
