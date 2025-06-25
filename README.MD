@@ -2,13 +2,13 @@
 
 A simple ExpressJS server that dynamically alerts of Roblox ROBUX donations donations to an OBS Web source, with support for **Donation messages, TTS, & more**! (Similar to Streamlabs alerts)
 
-[🎥 Demo of this tool](https://x.com/RansomwaveGames/status/1845154297798873380)
-
 ## Why?
 
-I recently got permanently suspended from PayPal. I'll cut you the details, but this was a massive hit for me & my Twitch. I thought: "Isn't there a way to do the same but with Roblox Robux? It seems easy enough." After looking around for a while, I was unable to find any resource that allows you, as a streamer, to easily send Robux donation alerts to an OBS web source.
+Roblox streamers need a way of receiving donations without worrying about leaking personal details or chargebacks with platforms like PayPal.
 
-This resource allows you to host your public webserver and have a game send donation data to it.
+Unlike [other solutions](https://www.youtube.com/watch?v=pXUYkEhH5ss), this project is meant to be entirely hosted and operated by you, meaning [people like haz3m doesn't take a 10% cut off your donations](https://www.reddit.com/r/roblox/comments/tanvus/robloxs_gamepass_sales_have_a_hidden_10_fee_that/).
+
+This resource allows you to host a public web server and have a game send Robux donation data to it.
 
 ## What?
 
@@ -16,19 +16,20 @@ API hosted on "/api/donations" using ExpressJS. All static content (HTML of the 
 
 ## How?
 
-1. Download & install Visual Studio Code on your PC.
+1. Download & install Visual Studio Code.
 2. Download & install [Git](https://git-scm.com/downloads)
-3. Download & install [NPM](https://www.npmjs.com/).
-4. Use NPM to download [Express](https://www.npmjs.com/package/express)
-5. Clone this repository: `git clone https://github.com/Ransomwave/Roblox-Stream-Donations`
-6. Edit `server.js` & Replace the default `CLIENT_SECRET`.
-7. Customize the HTML code (the `index.html` file) as much as you want. (Change the style, text, gif, music... Anything!)
-8. Publish your web server to a host (free ones include Vercel or Netlify).
-9. On Roblox, use the .rblx place file linked below _(THERE WILL BE A TEMPLATE SOON)_ or create your own. (Be sure the HTTP requests are pointing to /api/donnations _(eg. https://donos-example.vercel.io/api/donations)_)
+3. Download & install [Node.js](https://nodejs.org/en/download).
+4. Clone this repository: `git clone https://github.com/Ransomwave/Roblox-Stream-Donations`
+5. Run the `npm i` command to install all project dependencies.
+6. Edit `server.js` & replace the default `CLIENT_SECRET`.
+7. Customize the HTML code (the `index.html` file) to your liking. (Change the style, text, gif, music... Anything!)
+8. Publish your web server to a host (eg. Vercel or Netlify).
+9. On Roblox, use the .rblx place file linked below _(THERE WILL BE A TEMPLATE SOON)_ or create your own. 
+   * Make sure the HTTP requests are pointing to `/api/donations` _(eg. https://your-amazing-website.vercel.io/api/donations)_
 10. Once you're happy with how your donations look, create a repository on GitHub and upload your code.
 11. Sign up to a free host like [Vercel](https://vercel.com)
 12. Make a new Project & associate it with your new repository.
-13. Once It's uploaded, copy the generated URL (ex. https://donos-example.vercel.io/)
+13. Once It's uploaded, copy the generated URL (eg. https://your-amazing-website.vercel.io/)
 14. Add the link as a Browser Source to OBS
 
 ## How do I send requests from Roblox?
