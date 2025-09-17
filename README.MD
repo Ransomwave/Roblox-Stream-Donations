@@ -6,7 +6,7 @@ A simple ExpressJS server that dynamically alerts of Roblox ROBUX donations dona
 
 Roblox streamers need a way of receiving donations without worrying about leaking personal details or chargebacks with platforms like PayPal.
 
-Unlike [other solutions](https://www.youtube.com/watch?v=pXUYkEhH5ss), this project is meant to be entirely hosted and operated by you, meaning [people like haz3m doesn't take a 10% cut off your donations](https://www.reddit.com/r/roblox/comments/tanvus/robloxs_gamepass_sales_have_a_hidden_10_fee_that/).
+Unlike [other solutions](https://www.youtube.com/watch?v=pXUYkEhH5ss), this project is meant to be entirely hosted and operated by you, meaning [people like haz3m don't take a 10% cut off your donations](https://www.reddit.com/r/roblox/comments/tanvus/robloxs_gamepass_sales_have_a_hidden_10_fee_that/).
 
 This resource allows you to host a public web server and have a game send Robux donation data to it.
 
@@ -21,11 +21,11 @@ API hosted on "/api/donations" using ExpressJS. All static content (HTML of the 
 3. Download & install [Node.js](https://nodejs.org/en/download).
 4. Clone this repository: `git clone https://github.com/Ransomwave/Roblox-Stream-Donations`
 5. Run the `npm i` command to install all project dependencies.
-6. Edit `server.js` & replace the default `CLIENT_SECRET`.
+6. Copy the `.env.example` file, modify the default `CLIENT_SECRET` and save it as `.env`.
 7. Customize the HTML code (the `index.html` file) to your liking. (Change the style, text, gif, music... Anything!)
 8. Publish your web server to a host (eg. Vercel or Netlify).
-9. On Roblox, use the .rblx place file linked below _(THERE WILL BE A TEMPLATE SOON)_ or create your own. 
-   * Make sure the HTTP requests are pointing to `/api/donations` _(eg. https://your-amazing-website.vercel.io/api/donations)_
+9. On Roblox, use the .rblx place file linked below _(THERE WILL BE A TEMPLATE SOON)_ or create your own.
+   - Make sure the HTTP requests are pointing to `/api/donations` _(eg. https://your-amazing-website.vercel.io/api/donations)_
 10. Once you're happy with how your donations look, create a repository on GitHub and upload your code.
 11. Sign up to a free host like [Vercel](https://vercel.com)
 12. Make a new Project & associate it with your new repository.
@@ -52,7 +52,7 @@ local Donations = {
 	[500] = 1910962141;
 	[1000] = 1910962556;
 	[5000] = 1910962869;
-	[10000] = 1910963800;	
+	[10000] = 1910963800;
 }
 
 function sendDonation(donorName, amount, donorMsg)
@@ -92,9 +92,9 @@ local function processReceipt(receiptInfo)
 		local handler = productFunctions[productId]
 		local success, result = pcall(handler, receiptInfo, player)
 		if success then
-			
+
 			--task.wait(5)
-			
+
 			return Enum.ProductPurchaseDecision.PurchaseGranted
 		else
 			warn("Failed to process receipt:", receiptInfo, result)
@@ -110,6 +110,7 @@ end
 MarketplaceService.ProcessReceipt = processReceipt
 
 ```
+
 This code will send an HTTP request to your server each time a Developer Product is purchased.
 
 ### Is sending the CLIENT_SECRET in the body safe?
