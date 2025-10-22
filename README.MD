@@ -16,23 +16,32 @@ This resource allows you to host a public web server and have a game send Robux 
 
 API hosted on "/api/donations" using ExpressJS. All static content (HTML of the alert) is hosted under "/public". If multiple donations are sent at the same time, they will be put on a queue and won't play at the same time.
 
+## Requirements
+
+- [Visual Studio Code](https://code.visualstudio.com/) (or any code editor of your choice)
+- [Node.js](https://nodejs.org/en/download)
+- A hosting platform (eg. Vercel, Netlify, etc.)
+- A Roblox game with HTTP Requests enabled.
+- OBS Studio
+
 ## How?
 
-1. Download & install Visual Studio Code.
-2. Download & install [Git](https://git-scm.com/downloads)
-3. Download & install [Node.js](https://nodejs.org/en/download).
-4. Clone this repository: `git clone https://github.com/Ransomwave/Roblox-Stream-Donations`
-5. Run the `npm i` command to install all project dependencies.
-6. Copy the `.env.example` file, modify the default `CLIENT_SECRET` and save it as `.env`.
-7. Customize the HTML code (the `index.html` file) to your liking. (Change the style, text, gif, music... Anything!)
-8. Publish your web server to a host (eg. Vercel or Netlify).
-9. On Roblox, use the .rblx place file linked below _(THERE WILL BE A TEMPLATE SOON)_ or create your own.
+1. [Download this repository](https://github.com/Ransomwave/Roblox-Stream-Donations/archive/refs/heads/master.zip) or clone it using:
+   ```
+   git clone https://github.com/Ransomwave/Roblox-Stream-Donations.git
+   ```
+2. Open the project folder in your code editor (e.g. Visual Studio Code).
+3. Run the `npm i` command to install all project dependencies.
+4. Copy the `.env.example` file, modify the default `CLIENT_SECRET` and save it as `.env`.
+5. Customize the HTML code (the `index.html` file) to your liking. (Change the style, text, gif, music... Anything!)
+6. Publish your web server to a host (eg. Vercel or Netlify).
+7. On Roblox, use the .rblx place file linked below _(THERE WILL BE A TEMPLATE SOON)_ or create your own.
    - Make sure the HTTP requests are pointing to `/api/donations` _(eg. https://your-amazing-website.vercel.io/api/donations)_
-10. Once you're happy with how your donations look, create a repository on GitHub and upload your code.
-11. Sign up to a free host like [Vercel](https://vercel.com)
-12. Make a new Project & associate it with your new repository.
-13. Once It's uploaded, copy the generated URL (eg. https://your-amazing-website.vercel.io/)
-14. Add the link as a Browser Source to OBS
+8. Once you're happy with how your donations look, create a repository on GitHub and upload your code.
+9. Sign up to a free host like [Vercel](https://vercel.com)
+10. Make a new Project & associate it with your new repository.
+11. Once It's uploaded, copy the generated URL (eg. https://your-amazing-website.vercel.io/)
+12. Add the link as a Browser Source to OBS
 
 ## How do I send requests from Roblox?
 
