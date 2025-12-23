@@ -31,17 +31,19 @@ API hosted on "/api/donations" using ExpressJS. All static content (HTML of the 
    git clone https://github.com/Ransomwave/Roblox-Stream-Donations.git
    ```
 2. Open the project folder in your code editor (e.g. Visual Studio Code).
-3. Run the `npm i` command to install all project dependencies.
+3. Install all project dependencies.
+   ```
+   npm install
+   ```
 4. Copy the `.env.example` file, modify the default `CLIENT_SECRET` and save it as `.env`.
-5. Customize the HTML code (the `index.html` file) to your liking. (Change the style, text, gif, music... Anything!)
-6. Publish your web server to a host (eg. Vercel or Netlify).
-7. On Roblox, use the .rblx place file linked below _(THERE WILL BE A TEMPLATE SOON)_ or create your own.
-   - Make sure the HTTP requests are pointing to `/api/donations` _(eg. https://your-amazing-website.vercel.io/api/donations)_
-8. Once you're happy with how your donations look, create a repository on GitHub and upload your code.
-9. Sign up to a free host like [Vercel](https://vercel.com)
-10. Make a new Project & associate it with your new repository.
-11. Once It's uploaded, copy the generated URL (eg. https://your-amazing-website.vercel.io/)
-12. Add the link as a Browser Source to OBS
+5. Customize the HTML code (the `index.html` file) to your liking. _(Change the style, text, gif, music... Anything!)_
+6. [Initialize a new GitHub repository](https://code.visualstudio.com/docs/sourcecontrol/quickstart) and push your code to it.
+7. Sign up to a free host like [Vercel](https://vercel.com).
+8. Make a new Project & associate it with your new repository.
+9. Once It's uploaded, copy the generated URL (eg. https://your-amazing-website.vercel.io/)
+10. Add the link as a Browser Source to OBS
+11. On Roblox, use the .rblx place file linked below _(THERE WILL BE A TEMPLATE SOON)_ or create your own.
+    - Make sure the HTTP requests are pointing to `/api/donations` _(eg. https://your-amazing-website.vercel.io/api/donations)_
 
 ## How do I send requests from Roblox?
 
