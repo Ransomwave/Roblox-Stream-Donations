@@ -1,0 +1,116 @@
+/* Styles for the donation alert */
+/* Here you can customize the appearance and animations of the donation alert */
+
+/* Main page styling - sets the overall look of the donation alert page */
+body {
+  font-family: "Roboto", sans-serif;
+  color: white;
+  background-color: #000;
+}
+
+/* Centers all content on the page horizontally */
+.content {
+  text-align: center;
+}
+
+/* Main container that holds the entire donation alert widget */
+.alert_widget-container {
+  display: flex;
+  background-color: rgba(255, 255, 255, 0);
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+  border-radius: 10px;
+  flex-direction: column;
+}
+
+/* Container that holds the donation alert image/GIF */
+.alert_image-container {
+  display: flex;
+  flex-grow: 1;
+  width: 36%;
+  margin-top: 16px;
+  justify-content: center;
+  align-self: center;
+}
+
+/* The actual image/GIF that appears during donation alerts */
+.alert_image {
+  width: 100%;
+  height: 100%;
+  border-radius: 3px;
+}
+
+/* Container that holds all the text content (donor name, amount, message) */
+.alert_text-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  max-height: 100%;
+  max-width: 100%;
+}
+
+/* Main donation text styling (shows donor name and amount) */
+.alert_text {
+  font-family: Roboto, sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #ffffff;
+  width: 100%;
+  margin: 10px;
+}
+
+/* Special styling for the donor's name to make it stand out */
+.alert-widget__text-accent {
+  color: #ff4646;
+}
+
+/* Secondary text styling (shows the donation message) */
+.alert_secondary-text {
+  font-family: Roboto, sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  color: #ffffff;
+  width: 100%;
+}
+
+/* Animation that makes donation alerts fade in smoothly */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animation that makes donation alerts fade out smoothly */
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+/* Applied to donations div when showing - triggers fade in animation */
+#donations.fadeIn {
+  display: flex;
+  animation: fadeIn 1s forwards;
+}
+
+/* Applied to donations div when hiding - triggers fade out animation */
+#donations.fadeOut {
+  display: flex;
+  animation: fadeOut 1s forwards;
+}
