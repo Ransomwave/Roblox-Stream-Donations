@@ -1,1 +1,1 @@
-{ "version": 2, "rewrites": [{ "source": "/api/(.*)", "destination": "/api" }] }
+{ "version": 2, "framework": null, "rewrites": [{ "source": "/api/(.*)", "destination": "/api" }] }
