@@ -35,20 +35,21 @@ API hosted on "/api/donations" using ExpressJS. All static content (the alert ov
    ```
    npm install
    ```
-4. Copy the `.env.example` file, change `CLIENT_SECRET` and save it as `.env`. Adjust the alert settings in `public/config.json` (see [Configuration](#configuration)).
+4. Copy the `.env.example` file, change `CLIENT_SECRET` and save it as `.env`. Adjust the alert settings in `public/config.js` (see [Configuration](#configuration)).
 5. Customize the overlay to your liking: `public/index.html`, `public/css/style.css` and the gif/sound in `public/media`. _(Change the style, text, gif, music... Anything!)_
 6. [Initialize a new GitHub repository](https://code.visualstudio.com/docs/sourcecontrol/quickstart) and push your code to it.
 7. Sign up to a free host like [Vercel](https://vercel.com).
 8. Make a new Project & associate it with your new repository. Add the variables from your `.env` under _Project Settings > Environment Variables_ (Vercel doesn't read your `.env` file).
 9. Once It's uploaded, copy the generated URL (eg. https://your-amazing-website.vercel.io/)
 10. Add the link as a Browser Source to OBS
+    - To check it works, send a test donation with `npm run test-donation -- 150 https://your-amazing-website.vercel.io`. The amount is optional (defaults to `150`), and leaving out the URL targets your local server (`npm run dev`).
 11. On Roblox, use the .rblx place file linked below _(THERE WILL BE A TEMPLATE SOON)_ or create your own.
     - Make sure the HTTP requests are pointing to `/api/donations` _(eg. https://your-amazing-website.vercel.io/api/donations)_
 
 ## Configuration
 
 - **Server settings** (`CLIENT_SECRET`, port, queue size, text length) go in `.env`. Each one is documented in `.env.example`.
-- **Overlay settings** go in `public/config.json`:
+- **Overlay settings** go in `public/config.js`:
 
 | Setting        | Default | Description                                                                               |
 | -------------- | ------- | ----------------------------------------------------------------------------------------- |
@@ -60,7 +61,7 @@ API hosted on "/api/donations" using ExpressJS. All static content (the alert ov
 | `fadeTime`     | `1000`  | Time (ms) for the donation to fade out.                                                   |
 
 > [!CAUTION]
-> `config.json` is a public file! Never put secrets in it.
+> `config.js` is a public file! Never put secrets in it.
 
 ## How do I send requests from Roblox?
 

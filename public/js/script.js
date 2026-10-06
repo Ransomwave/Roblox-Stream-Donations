@@ -1,7 +1,8 @@
 // !!! RECOMMENDED WINDOW SIZE: 700x600 !!!
-// !!! SETTINGS ARE DEFINED IN public/config.json !!!
+// !!! SETTINGS ARE DEFINED IN public/config.js !!!
 
-let config;
+import { CONFIG } from "../config.js";
+
 let lastSeenId = null; // Id of the newest donation already shown; null until the first fetch
 const msg = new SpeechSynthesisUtterance();
 
@@ -9,7 +10,7 @@ const msg = new SpeechSynthesisUtterance();
 function pickVoice() {
   const voices = speechSynthesis.getVoices();
   msg.voice =
-    voices.find((voice) => voice.name === config?.ttsVoiceName) ??
+    voices.find((voice) => voice.name === CONFIG.ttsVoiceName) ??
     voices.find((voice) => voice.lang.startsWith("en")) ??
     null;
 }
@@ -40,7 +41,7 @@ async function pollDonations() {
     console.error("Failed to fetch donations:", error);
   }
 
-  setTimeout(pollDonations, config.pollInterval);
+  setTimeout(pollDonations, CONFIG.pollInterval);
 }
 
 function sanitizeHTML(str) {
@@ -75,12 +76,12 @@ async function displayDonation({ donorName, amount, donorMessage }) {
   donationsDiv.style.display = "flex"; // Make sure the div is visible
 
   const donationSound = document.getElementById("donationSound");
-  donationSound.volume = config.soundVolume;
+  donationSound.volume = CONFIG.soundVolume;
 
   // When the donation sound ends, read the donation out loud if it meets the TTS threshold
   donationSound.onended = () => {
     setTimeout(() => {
-      if (amount < config.minTtsAmount) {
+      if (amount < CONFIG.minTtsAmount) {
         console.log(`Donation below threshold (${amount} ROBUX)`);
         return;
       }
@@ -93,19 +94,13 @@ async function displayDonation({ donorName, amount, donorMessage }) {
     .play()
     .catch((error) => console.error("Failed to play donation sound:", error));
 
-  await wait(config.donationTime);
+  await wait(CONFIG.donationTime);
 
   donationsDiv.classList.remove("fadeIn");
   donationsDiv.classList.add("fadeOut");
-  await wait(config.fadeTime);
+  await wait(CONFIG.fadeTime);
   donationsDiv.style.display = "none"; // Hide the div after the animation
 }
 
-/** Loads config.json, then starts polling. */
-async function start() {
-  config = await (await fetch("/config.json")).json();
-  pickVoice();
-  pollDonations();
-}
-
-start();
+pickVoice();
+pollDonations();
