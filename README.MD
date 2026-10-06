@@ -35,27 +35,44 @@ API hosted on "/api/donations" using ExpressJS. All static content (HTML of the 
    ```
    npm install
    ```
-4. Copy the `.env.example` file, modify the default `CLIENT_SECRET` and save it as `.env`.
-5. Customize the HTML code (the `index.html` file) to your liking. _(Change the style, text, gif, music... Anything!)_
+4. Copy the `.env.example` file, change `CLIENT_SECRET` and save it as `.env`. Adjust the alert settings in `api/public/config.json` (see [Configuration](#configuration)).
+5. Customize the overlay to your liking: `api/views/index.html`, `api/public/style.css` and the gif/sound in `api/public`. _(Change the style, text, gif, music... Anything!)_
 6. [Initialize a new GitHub repository](https://code.visualstudio.com/docs/sourcecontrol/quickstart) and push your code to it.
 7. Sign up to a free host like [Vercel](https://vercel.com).
-8. Make a new Project & associate it with your new repository.
+8. Make a new Project & associate it with your new repository. Add the variables from your `.env` under _Project Settings > Environment Variables_ (Vercel doesn't read your `.env` file).
 9. Once It's uploaded, copy the generated URL (eg. https://your-amazing-website.vercel.io/)
 10. Add the link as a Browser Source to OBS
 11. On Roblox, use the .rblx place file linked below _(THERE WILL BE A TEMPLATE SOON)_ or create your own.
     - Make sure the HTTP requests are pointing to `/api/donations` _(eg. https://your-amazing-website.vercel.io/api/donations)_
 
+## Configuration
+
+- **Server settings** (`CLIENT_SECRET`, port, queue size, text length) go in `.env`. Each one is documented in `.env.example`.
+- **Overlay settings** go in `api/public/config.json`:
+
+| Setting        | Default | Description                                                                               |
+| -------------- | ------- | ----------------------------------------------------------------------------------------- |
+| `minTtsAmount` | `100`   | Minimum donation (in Robux) that gets read out loud with text-to-speech.                  |
+| `donationTime` | `7000`  | How long each alert stays on screen, in milliseconds.                                     |
+| `soundVolume`  | `0.2`   | Volume of the donation sound, from `0` (muted) to `1` (full).                             |
+| `ttsVoiceName` | `""`    | Text-to-speech voice name (e.g. `"Microsoft David"`). Empty uses the first English voice. |
+| `pollInterval` | `1000`  | How often the overlay checks for new donations, in milliseconds.                          |
+| `fadeTime`     | `1000`  | Time (ms) for the donation to fade out.                                                   |
+
+> [!CAUTION]
+> `config.json` is a public file! Never put secrets in it.
+
 ## How do I send requests from Roblox?
 
 You can use Roblox's HTTP Service to send a request every time a Developer Product is bought, for example.
 
-Here's a code example.
+The following is an example of how to send a `POST` request to the donations server when a donation is purchased.
 
-```lua
+```luau
 local MarketplaceService = game:GetService("MarketplaceService")
 local HttpService = game:GetService("HttpService")
-local Players = game.Players
-local url = "http://localhost:12000/api/donations" -- Replace with your domain (ex. https://donos-example.vercel.io/api/donations).
+local Players = game:GetService("Players")
+local url = "https://donos-example.vercel.io/api/donations" -- Replace with your domain.
 local CLIENT_SECRET = "roblox"
 
 local Donations = {
@@ -86,7 +103,7 @@ end
 
 local productFunctions = {}
 
-for i,v in Donations do
+for i, v in Donations do
 	productFunctions[v] = function(receipt, player:Player)
 		local info = MarketplaceService:GetProductInfo(v, Enum.InfoType.Product)
 		sendDonation(`{player.DisplayName} (@{player.Name})`, info.PriceInRobux, player.PlayerGui.ScreenGui.SendTTSDialog.TextBox.Text)
@@ -123,8 +140,6 @@ end
 MarketplaceService.ProcessReceipt = processReceipt
 
 ```
-
-This code will send an HTTP request to your server each time a Developer Product is purchased.
 
 ### Is sending the CLIENT_SECRET in the body safe?
 
