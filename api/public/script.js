@@ -1,96 +1,46 @@
 // !!! RECOMMENDED WINDOW SIZE: 700x600 !!!
-const MIN_TTS_AMOUNT = 100; // Set this to the minimum donation amount you want for TTS to appear.
-const DONATION_TIME = 7000; // Set this to the time you want the donation to appear on the screen.
-const SOUND_VOLUME = 0.2; // Set this to the volume you want the donation sound to be.
+// !!! SETTINGS ARE DEFINED IN /public/config.json !!!
 
-let lastDonationTimestamp = 0;
-let isDisplayingDonation = false;
+let config;
+let lastSeenId = null; // Id of the newest donation already shown; null until the first fetch
+const msg = new SpeechSynthesisUtterance();
 
-let msg = new SpeechSynthesisUtterance();
-
-speechSynthesis.onvoiceschanged = () => {
+/** Picks the configured TTS voice, falling back to the first English voice. */
+function pickVoice() {
   const voices = speechSynthesis.getVoices();
-  msg.voice = voices[5];
-};
+  msg.voice =
+    voices.find((voice) => voice.name === config?.ttsVoiceName) ??
+    voices.find((voice) => voice.lang.startsWith("en")) ??
+    null;
+}
 
-async function fetchDonations() {
-  if (isDisplayingDonation) return;
+speechSynthesis.onvoiceschanged = pickVoice;
 
-  const response = await fetch("/api/donations");
-  const donations = await response.json();
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  const newDonation = donations.find(
-    (donation) =>
-      new Date(donation.timestamp) > new Date(lastDonationTimestamp),
-  );
+/** Polls the server and shows unseen donations one at a time, oldest first. */
+async function pollDonations() {
+  try {
+    const response = await fetch("/api/donations");
+    const donations = await response.json();
 
-  if (newDonation) {
-    isDisplayingDonation = true;
-    lastDonationTimestamp = newDonation.timestamp;
-
-    const donationsDiv = document.getElementById("donations");
-
-    const donationAmount = Number(newDonation.amount); // Convert
-    if (donationAmount < MIN_TTS_AMOUNT) {
-      donationsDiv.innerHTML = /*html*/ `
-              <div class="alert_widget-container">
-                <div class="alert_image-container">
-                  <img id="main-image" class="alert_image" src="/dono.gif" alt="Alert image" />
-                </div>
-                <div class="alert_text-container">
-                  <div class="resize-detector">&nbsp;</div>
-                  <div style="width: 100%;">
-                    <p class="alert_text">
-                      <span class="alert-widget__text-accent">${sanitizeHTML(
-                        newDonation.donorName,
-                      )}</span> donated <strong>${
-                        newDonation.amount
-                      }</strong> ROBUX!</p>
-                    <p class="alert_secondary-text">${sanitizeHTML(
-                      newDonation.donorMessage,
-                    )}</p>
-                  </div>
-                </div>
-              </div>
-            `;
-      showDonation(
-        sanitizeHTML(newDonation.donorName),
-        newDonation.amount,
-        sanitizeHTML(newDonation.donorMessage),
-      );
+    if (lastSeenId === null) {
+      // Skip donations that arrived before the overlay was opened
+      lastSeenId = donations.at(-1)?.id ?? 0;
     } else {
-      donationsDiv.innerHTML = /*html*/ `
-              <div class="alert_widget-container">
-                <div class="alert_image-container">
-                  <img id="main-image" class="alert_image" src="/dono.gif" alt="Alert image" />
-                </div>
-                <div class="alert_text-container">
-                  <div class="resize-detector">&nbsp;</div>
-                  <div style="width: 100%;">
-                    <p class="alert_text">
-                      <span class="alert-widget__text-accent">${sanitizeHTML(
-                        newDonation.donorName,
-                      )}</span> donated <strong>${
-                        newDonation.amount
-                      }</strong> ROBUX!</p>
-                    <p class="alert_secondary-text">${sanitizeHTML(
-                      newDonation.donorMessage,
-                    )}</p>
-                  </div>
-                </div>
-              </div>
-            `;
-      showDonation(
-        sanitizeHTML(newDonation.donorName),
-        newDonation.amount,
-        sanitizeHTML(newDonation.donorMessage),
+      const newDonation = donations.find(
+        (donation) => donation.id > lastSeenId,
       );
+      if (newDonation) {
+        lastSeenId = newDonation.id;
+        await displayDonation(newDonation);
+      }
     }
-
-    setTimeout(() => {
-      hideDonation();
-    }, DONATION_TIME); // Display each donation for 7 seconds
+  } catch (error) {
+    console.error("Failed to fetch donations:", error);
   }
+
+  setTimeout(pollDonations, config.pollInterval);
 }
 
 function sanitizeHTML(str) {
@@ -99,46 +49,63 @@ function sanitizeHTML(str) {
   return temp.innerHTML;
 }
 
-function showDonation(donorName, amount, donorMessage) {
+/** Shows a donation alert, plays its sound and TTS, then hides it. Resolves once it's hidden. */
+async function displayDonation({ donorName, amount, donorMessage }) {
   const donationsDiv = document.getElementById("donations");
+  donationsDiv.innerHTML = /*html*/ `
+    <div class="alert_widget-container">
+      <div class="alert_image-container">
+        <img id="main-image" class="alert_image" src="/dono.gif" alt="Alert image" />
+      </div>
+      <div class="alert_text-container">
+        <div class="resize-detector">&nbsp;</div>
+        <div style="width: 100%;">
+          <p class="alert_text">
+            <span class="alert-widget__text-accent">${sanitizeHTML(donorName)}</span>
+            donated <strong>${Number(amount)}</strong> ROBUX!
+          </p>
+          <p class="alert_secondary-text">${sanitizeHTML(donorMessage)}</p>
+        </div>
+      </div>
+    </div>
+  `;
+
   donationsDiv.classList.remove("fadeOut");
   donationsDiv.classList.add("fadeIn");
   donationsDiv.style.display = "flex"; // Make sure the div is visible
 
-  // Adjust the volume of the donation sound
   const donationSound = document.getElementById("donationSound");
-  donationSound.volume = SOUND_VOLUME; // Adjust volume to 20%
+  donationSound.volume = config.soundVolume;
 
-  // Play the donation sound
-  donationSound.play();
-
-  // When the donation sound ends, play the TTS message after a 1-second delay
+  // When the donation sound ends, read the donation out loud if it meets the TTS threshold
   donationSound.onended = () => {
     setTimeout(() => {
-      const donationAmount = Number(amount); // Convert amount to a number
-      if (donationAmount < MIN_TTS_AMOUNT) {
-        console.log(`Donation below threshold (${donationAmount} ROBUX)`);
-      } else {
-        console.log(
-          `Donation above threshold, playing TTS: ${donorName} donated ${donationAmount} ROBUX: ${donorMessage}`,
-        );
-        const ttsMessage = `${donorName} donated ${donationAmount} ROBUX: ${donorMessage}`;
-        msg.text = ttsMessage;
-        window.speechSynthesis.speak(msg);
+      if (amount < config.minTtsAmount) {
+        console.log(`Donation below threshold (${amount} ROBUX)`);
+        return;
       }
+      msg.text = `${donorName} donated ${amount} ROBUX: ${donorMessage}`;
+      console.log(`Donation above threshold, playing TTS: ${msg.text}`);
+      speechSynthesis.speak(msg);
     }, 100);
   };
-}
+  donationSound
+    .play()
+    .catch((error) => console.error("Failed to play donation sound:", error));
 
-function hideDonation() {
-  const donationsDiv = document.getElementById("donations");
+  await wait(config.donationTime);
+
   donationsDiv.classList.remove("fadeIn");
   donationsDiv.classList.add("fadeOut");
-  setTimeout(() => {
-    donationsDiv.style.display = "none"; // Hide the div after the animation
-    isDisplayingDonation = false; // Reset the flag
-  }, 1000); // This duration should match the length of the fadeOut animation
+  await wait(config.fadeTime);
+  donationsDiv.style.display = "none"; // Hide the div after the animation
 }
 
-// Example: Start fetching donations
-setInterval(fetchDonations, 1000); // Check for new donations every 1 second
+/** Loads config.json, then starts polling. */
+async function start() {
+  config = await (await fetch("/config.json")).json();
+  pickVoice();
+  pollDonations();
+}
+
+start();

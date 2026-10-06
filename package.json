@@ -2,6 +2,7 @@
   "name": "donation-server",
   "version": "1.0.0",
   "description": "A simple server to handle donations",
+  "type": "module",
   "main": "./api/index.js",
   "scripts": {
     "start": "node --env-file=.env ./api/index.js",
