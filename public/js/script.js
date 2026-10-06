@@ -1,5 +1,5 @@
 // !!! RECOMMENDED WINDOW SIZE: 700x600 !!!
-// !!! SETTINGS ARE DEFINED IN /public/config.json !!!
+// !!! SETTINGS ARE DEFINED IN public/config.json !!!
 
 let config;
 let lastSeenId = null; // Id of the newest donation already shown; null until the first fetch
@@ -55,7 +55,7 @@ async function displayDonation({ donorName, amount, donorMessage }) {
   donationsDiv.innerHTML = /*html*/ `
     <div class="alert_widget-container">
       <div class="alert_image-container">
-        <img id="main-image" class="alert_image" src="/dono.gif" alt="Alert image" />
+        <img id="main-image" class="alert_image" src="/media/dono.gif" alt="Alert image" />
       </div>
       <div class="alert_text-container">
         <div class="resize-detector">&nbsp;</div>

@@ -14,7 +14,7 @@ This resource allows you to host a public web server and have a game send Robux 
 
 ## What?
 
-API hosted on "/api/donations" using ExpressJS. All static content (HTML of the alert) is hosted under "/public". If multiple donations are sent at the same time, they will be put on a queue and won't play at the same time.
+API hosted on "/api/donations" using ExpressJS. All static content (the alert overlay) lives in the `public/` folder. If multiple donations are sent at the same time, they will be put on a queue and won't play at the same time.
 
 ## Requirements
 
@@ -35,8 +35,8 @@ API hosted on "/api/donations" using ExpressJS. All static content (HTML of the 
    ```
    npm install
    ```
-4. Copy the `.env.example` file, change `CLIENT_SECRET` and save it as `.env`. Adjust the alert settings in `api/public/config.json` (see [Configuration](#configuration)).
-5. Customize the overlay to your liking: `api/views/index.html`, `api/public/style.css` and the gif/sound in `api/public`. _(Change the style, text, gif, music... Anything!)_
+4. Copy the `.env.example` file, change `CLIENT_SECRET` and save it as `.env`. Adjust the alert settings in `public/config.json` (see [Configuration](#configuration)).
+5. Customize the overlay to your liking: `public/index.html`, `public/css/style.css` and the gif/sound in `public/media`. _(Change the style, text, gif, music... Anything!)_
 6. [Initialize a new GitHub repository](https://code.visualstudio.com/docs/sourcecontrol/quickstart) and push your code to it.
 7. Sign up to a free host like [Vercel](https://vercel.com).
 8. Make a new Project & associate it with your new repository. Add the variables from your `.env` under _Project Settings > Environment Variables_ (Vercel doesn't read your `.env` file).
@@ -48,7 +48,7 @@ API hosted on "/api/donations" using ExpressJS. All static content (HTML of the 
 ## Configuration
 
 - **Server settings** (`CLIENT_SECRET`, port, queue size, text length) go in `.env`. Each one is documented in `.env.example`.
-- **Overlay settings** go in `api/public/config.json`:
+- **Overlay settings** go in `public/config.json`:
 
 | Setting        | Default | Description                                                                               |
 | -------------- | ------- | ----------------------------------------------------------------------------------------- |

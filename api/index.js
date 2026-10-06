@@ -19,8 +19,8 @@ const MAX_TEXT_LENGTH = Number(process.env.MAX_TEXT_LENGTH) || 200;
 const app = express();
 app.use(express.json());
 
-// Serve static files from the 'public' directory
-app.use(express.static(path.join(import.meta.dirname, "public")));
+// Serve the overlay (index.html, css, js, media) from the root 'public' directory. On Vercel, its CDN serves these instead.
+app.use(express.static(path.join(import.meta.dirname, "..", "public")));
 
 let donations = [];
 let lastId = 0;
@@ -59,11 +59,6 @@ app.post("/api/donations", (req, res) => {
 // Returns stored donations, oldest first
 app.get("/api/donations", (_req, res) => {
   res.json(donations);
-});
-
-// Serve the main HTML file
-app.get("/", (_req, res) => {
-  res.sendFile(path.join(import.meta.dirname, "views", "index.html"));
 });
 
 // Start the server if this file is run directly
