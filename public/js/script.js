@@ -2,6 +2,7 @@
 // !!! SETTINGS ARE DEFINED IN public/config.js !!!
 
 import { CONFIG } from "../config.js";
+import { formatNumber, sanitizeHTML, wait } from "./utils.js";
 
 let lastSeenId = null; // Id of the newest donation already shown; null until the first fetch
 const msg = new SpeechSynthesisUtterance();
@@ -16,8 +17,6 @@ function pickVoice() {
 }
 
 speechSynthesis.onvoiceschanged = pickVoice;
-
-const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /** Polls the server and shows unseen donations one at a time, oldest first. */
 async function pollDonations() {
@@ -44,12 +43,6 @@ async function pollDonations() {
   setTimeout(pollDonations, CONFIG.pollInterval);
 }
 
-function sanitizeHTML(str) {
-  const temp = document.createElement("div");
-  temp.textContent = str;
-  return temp.innerHTML;
-}
-
 /** Shows a donation alert, plays its sound and TTS, then hides it. Resolves once it's hidden. */
 async function displayDonation({ donorName, amount, donorMessage }) {
   const donationsDiv = document.getElementById("donations");
@@ -63,7 +56,7 @@ async function displayDonation({ donorName, amount, donorMessage }) {
         <div style="width: 100%;">
           <p class="alert_text">
             <span class="alert-widget__text-accent">${sanitizeHTML(donorName)}</span>
-            donated <strong>${Number(amount)}</strong> ROBUX!
+            donated <strong>${formatNumber(amount)}</strong> ROBUX!
           </p>
           <p class="alert_secondary-text">${sanitizeHTML(donorMessage)}</p>
         </div>
